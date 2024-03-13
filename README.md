@@ -2,12 +2,13 @@
 ## DESCRIPTION
 
 
-This script lets your players earn some hard cash by stealing wheels using integrated [ls_bolt_minigame](https://www.youtube.com/watch?v=xyJZGVEFAmo) export. 
+This script lets your players earn some hard cash by stealing wheels using integrated [ls_bolt_minigame](https://lith.store/package/6174416) export. 
 Players will receive a mission from NPC ped containing a number plate of the target vehicle and a general area where the vehicle is located. 
 After going to the general area and finding the target vehicle, players will have to jack the car up using a car jack. 
-Using [ls_bolt_minigame](https://www.youtube.com/watch?v=xyJZGVEFAmo) export, players will unscrew the bolts of each wheel and store the wheel in the trunk of a truck.
+Using [ls_bolt_minigame](https://lith.store/package/6174416) export, players will unscrew the bolts of each wheel and store the wheel in the trunk of a truck.
 After all wheels are taken off the car, the player can retrieve his jackstand and place the car on bricks. Player will be given a location of the buyer to sell off the stolen wheels.
 
+https://www.youtube.com/watch?v=xyJZGVEFAmo
 
 ## IMPORTANT INFORMATION
 1. The jack stand item (default `ls_jackstand`) is provided in the resource files **BUT YOU HAVE TO FIND A WAY HOW TO GIVE THE PLAYER THE JACK STAND ITEM**
