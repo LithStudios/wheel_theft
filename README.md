@@ -8,6 +8,7 @@ After going to the general area and finding the target vehicle, players will hav
 Using [ls_bolt_minigame](https://lith.store/package/6174416) export, players will unscrew the bolts of each wheel and store the wheel in the trunk of a truck.
 After all wheels are taken off the car, the player can retrieve his jackstand and place the car on bricks. Player will be given a location of the buyer to sell off the stolen wheels.
 
+## SCRIPT PREVIEW
 https://www.youtube.com/watch?v=xyJZGVEFAmo
 
 ## IMPORTANT INFORMATION
