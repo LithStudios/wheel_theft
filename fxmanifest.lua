@@ -31,3 +31,5 @@ client_scripts {
     'client/mission.lua',
     'client/jackstand.lua'
 }
+
+dependency 'ls_bolt_minigame'
