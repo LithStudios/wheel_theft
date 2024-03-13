@@ -1,0 +1,8 @@
+in your server files, open: [qb] > qb-core > shared > items.lua
+for older qbcore versions, open: [qb] > qb-core > shared.lua
+
+and add this line to the bottom:
+
+['ls_jackstand'] 			= {['name'] = 'ls_jackstand', 				['label'] = 'Jack Stand', 			['weight'] = 0, 		['type'] = 'item', 		['image'] = 'jack_stand.png', 		['unique'] = true, 		['useable'] = true, 	['shouldClose'] = true,	   ['combinable'] = nil,   ['description'] = 'Jack Stand'},
+
+Finally, put the image located in this folder in: [qb] > qb-inventory > html > images
