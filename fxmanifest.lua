@@ -3,7 +3,7 @@ games      { 'gta5' }
 
 author 'Lith Studios | Swizz'
 description 'Wheel Theft by Lith Studios'
-version '1.0.0'
+version '1.1.0'
 
 --
 -- Server
@@ -23,6 +23,8 @@ server_scripts {
 client_scripts {
     'client/cache.lua',
     'config.lua',
+    'client/truckSpawn.lua',
+    'client/policeAlert.lua',
     'client/framework_functions/esx.lua',
     'client/framework_functions/qb.lua',
     'client/client.lua',
@@ -31,5 +33,3 @@ client_scripts {
     'client/mission.lua',
     'client/jackstand.lua'
 }
-
-dependency 'ls_bolt_minigame'

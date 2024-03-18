@@ -20,6 +20,10 @@ WHEEL_PROP = nil
 function StartMission()
     MISSION_ACTIVATED = true
 
+    if Config.spawnPickupTruck.enable then
+        SpawnTruck()
+    end
+
     Citizen.CreateThread(function()
         local sleep = 1500
         local vehicleModel = Config.vehicleModels[math.random(1, #Config.vehicleModels)]
@@ -78,6 +82,7 @@ end
 
 function StartWheelTheft(vehicle)
     Citizen.Wait(4000)
+    local notified = false
 
     while true do
         local sleep = 1000
@@ -95,6 +100,15 @@ function StartWheelTheft(vehicle)
                     Draw3DText(wheelCoords.x, wheelCoords.y, wheelCoords.z, 'Press ~g~[~w~E~g~]~w~ to start stealing', 4, 0.035, 0.035)
 
                     if IsControlJustReleased(0, Keys['E']) then
+                        if IsPoliceNotified() then
+                            notified = true
+
+                            if Config.dispatch.notifyThief then
+                                StartVehicleAlarm(vehicle)
+                            end
+
+                            TriggerDispatch(GetEntityCoords(PlayerPedId()))
+                        end
                         StartWheelDismount(vehicle, wheelIndex, false, true, false)
                     end
                 else
@@ -150,6 +164,21 @@ function StopWheelTheft(vehicle)
 
         SetEntityAsNoLongerNeeded(vehicle)
     end)
+end
+
+function IsPoliceNotified()
+    if not Config.dispatch.enable then
+        return false
+    end
+
+    local alertChance = Config.dispatch.alertChance
+    local random = math.random(1,100)
+
+    if random <= alertChance then
+        return true
+    else
+        return false
+    end
 end
 
 function BeginWheelLoadingIntoTruck(wheelProp)
@@ -252,3 +281,10 @@ RegisterNetEvent('ls_wheel_theft:LowerVehicle')
 AddEventHandler('ls_wheel_theft:LowerVehicle', function()
     LowerVehicle()
 end)
+
+if Config.command.enable then
+    RegisterCommand(Config.command.name, function()
+        RaiseCar()
+        TriggerServerEvent('ls_wheel_theft:ResetPlayerState', NetworkGetNetworkIdFromEntity(PlayerPedId()))
+    end)
+end

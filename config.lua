@@ -2,6 +2,12 @@ Config = {}
 
 Config.debug = false
 
+-- Enabling this will let players lift the car up by using a `/...` command
+Config.command = {
+    enable = false,
+    name = 'lift'
+}
+
 Config.esxSettings = {
     enabled = true,
     useNewESXExport = true,
@@ -23,9 +29,60 @@ Config.job = {
     }
 }
 
+--- PLACEHOLDER - TARGET IS NOT IMPLEMENTED INTO THE SCRIPT
+--- Comments are placed in the script files, so you can see where to add target if you wish to :)
 Config.target = {
     enabled = false,
-    system = 'ox_target'
+    system = 'ox-target'
+}
+
+-------------------------------------------------
+--- DISPATCH
+-------------------------------------------------
+Config.dispatch = {
+    enable = true, -- Whether to enable the dispatch
+    notifyThief = true, --If thief should be notified that police has been alerted
+
+    alertChance = 100, --- The chance of theft being notified to police members NOTE: The event gets called 4 times (once per each wheel) so set the chance to a relatively low number
+
+    -- using 'in-built' dispatch will look like this: https://imgur.com/a/V1V7Z6z
+    system = 'in-built',  -- Setting for the dispatch system to use 'cd-dispatch', 'core-dispatch-old', 'core-dispatch-new' or 'ps-dispatch'
+    policeCode = '10-31',  -- Police code for the wheel theft
+    eventName = 'Theft',  -- Name of the theft event
+    description = 'Suspect is stealing vehicle wheels',  -- Description of the theft event
+
+    blip = {
+        sprite = 380,  -- Sprite for the Theft blip
+        color = 59,  -- Color for the Theft blip
+        scale = 1.0,  -- Scale for the Theft blip
+
+        timeout = 60,  -- Time in seconds for the blip to disappear after the Theft event is over
+
+        showRadar = true,  -- Setting to show the Theft blip on the radar
+    },
+}
+
+--Used for notifying police members of theft crime if Config.dispatch is enabled
+Config.policeJobNames = {
+    'police'
+}
+
+-- Whether to spawn a pick up truck for wheel theft (Check `client/truckSpawn.lua` if you want to edit this system)
+--- NOTE: SCRIPT DOES NOT CHECK IF SPAWN SITE IS OCCUPIED OR NOT - PICK UP TRUCKS CAN SPAWN IN EACH OTHER
+Config.spawnPickupTruck = {
+    enable = false,
+
+    -- Add more models by separating each with a comma ","
+    models = {
+        'bison'
+    },
+
+    truckSpawnCoords = {
+        x = 407.6,
+        y = -1917.2,
+        z = 25.1,
+        h = 50.6 -- heading
+    }
 }
 
 Config.jackStandName = 'ls_jackstand'
@@ -34,10 +91,20 @@ Config.jackStandName = 'ls_jackstand'
 Config.enableBlipRoute = true
 
 Config.missionBlip = {
-    showBlip = true, -- whether or not to show the methamphetamine selling location blip on the map
+    showBlip = true, -- whether or not to show the mission ped blip
     blipColor = 29,
     blipIcon = 514,
     blipLabel = 'Tire Theft Mission',
+}
+
+Config.blips = {
+    policeBlip = {
+        sprite = 161,
+        color = 47,
+        scale = 2.0,
+        alpha = 150,
+        shortRange = false,
+    },
 }
 
 -- Mission location where target vehicles will spawn (Picked randomly)
@@ -65,31 +132,7 @@ Config.missionLocations = {
         y = -913.2,
         z = 18.3,
         h = 270.2
-    },
-    {
-        x = -171.6,
-        y = 214.7,
-        z = 88.5,
-        h = 351.1
-    },
-    {
-        x = -504.6,
-        y = 44.3,
-        z = 55.8,
-        h = 87.2
-    },
-    {
-        x = 846.5,
-        y = -2180.1,
-        z = 29.6,
-        h = 358.1
-    },
-    {
-        x = -83.3,
-        y = -1405.5,
-        z = 28.7,
-        h = 103.5
-    },
+    }
 }
 
 --Add mission vehicles model names here
@@ -145,9 +188,6 @@ Config.missionPeds = {
             z = 24.8,
             h = 355.0,
         },
-
-        message = 'Sell the methamphetamine',
-        itemLabel = 'methamphetamine',
         pedModel = 'g_m_m_mexboss_01',
         duration = 2000, -- selling duration in ms
 
@@ -164,7 +204,7 @@ Config.missionPeds = {
 }
 
 --- LOCALE
--- To translate the messages edit the message on the right side! Not the message between the square brackets
+-- To translate the messages edit the message on the right side! DO NOT edit the message between the square brackets
 Locale = {
     ['Complete sale'] = 'Complete Sale',
     ['Your target vehicle\'s plate number: ~y~'] = 'Your target vehicle\'s plate number: ~y~',
@@ -177,7 +217,9 @@ Locale = {
     ['Press ~g~[~w~E~g~]~w~ to cancel mission'] = 'Press ~g~[~w~E~g~]~w~ to cancel mission',
     ['Press ~g~[~w~E~g~]~w~ to complete the sale'] = 'Press ~g~[~w~E~g~]~w~ to complete the sale',
     ['Finish the job'] = 'Finish the job',
-    ['Put the ~r~ stolen wheels ~w~ in the crate to finish the sale'] = 'Put the ~r~ stolen wheels ~w~ in the crate to finish the sale'
+    ['Put the ~r~ stolen wheels ~w~ in the crate to finish the sale'] = 'Put the ~r~ stolen wheels ~w~ in the crate to finish the sale',
+    ['. ~w~ Proceed with caution!'] = '. ~w~ Proceed with caution!',
+    ['Theft commited at ~y~'] = 'Theft commited at ~y~'
 }
 
 Settings = {}

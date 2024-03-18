@@ -25,6 +25,17 @@ if Config.qbSettings.enabled then
         end
     end)
 
+    function IsPolice(player)
+        local xPlayer = QBCore.Functions.GetPlayer(player)
+        if not xPlayer then
+            return false
+        end
+
+        local job = xPlayer.PlayerData.job
+
+        return Contains(Config.policeJobNames, job.name)
+    end
+
     function RetrieveItem(source, itemId)
         local xPlayer = QBCore.Functions.GetPlayer(tonumber(source))
         xPlayer.Functions.AddItem(itemId, 1)

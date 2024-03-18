@@ -25,6 +25,16 @@ if Config.esxSettings.enabled then
         end
     end)
 
+    function IsPolice(player)
+        local xPlayer = ESX.GetPlayerFromId(player)
+        if not xPlayer then
+            return false
+        end
+        local job = xPlayer.getJob()
+
+        return Contains(Config.policeJobNames, job.name)
+    end
+
     function RetrieveItem(source, item)
         local xPlayer = ESX.GetPlayerFromId(source)
         local itemCount = xPlayer.getInventoryItem(item).count

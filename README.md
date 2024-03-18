@@ -13,7 +13,7 @@ https://www.youtube.com/watch?v=xyJZGVEFAmo
 
 ## IMPORTANT INFORMATION
 1. The jack stand item (default `ls_jackstand`) is provided in the resource files **BUT YOU HAVE TO FIND A WAY HOW TO GIVE THE PLAYER THE JACK STAND ITEM**
-2. The Player **MUST** have a pick-up truck near the target vehicle to store the stolen wheels. 
+2. The Player **MUST** have a pick-up truck near the target vehicle to store the stolen wheels. Added config option to spawn a truck after starting a mission.
 
 
 ## Main Features:
@@ -22,3 +22,5 @@ https://www.youtube.com/watch?v=xyJZGVEFAmo
 * Integrated bolt minigame
 * ESX and QBCORE ready
 * Low Resmon (usually 0.00, max 0.02 if not using 3dtext, max 0.14 if using 3DText)
+* Integrated ps-dispatch, cd-dispatch and custom 'in-built' dispatch systems
+* Compatible for standalone

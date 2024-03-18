@@ -91,7 +91,7 @@ function GetNearestVehicle(x, y, z, radius)
     return closestVehicle, NetworkGetNetworkIdFromEntity(closestVehicle)
 end
 
-function SpawnMissionVehicle(modelName, coords)
+function SpawnMissionVehicle(modelName, coords, preventNearbyCarDeletion)
     RequestModel(modelName)
     while not HasModelLoaded(modelName) do
         Citizen.Wait(100)
@@ -100,6 +100,10 @@ function SpawnMissionVehicle(modelName, coords)
     local vehicle = CreateVehicle(modelName, coords.x, coords.y, coords.z + 1.5, coords.h, true, false)
 
     -- Delete nearby entities within the specified radius
+    if preventNearbyCarDeletion then
+        return vehicle
+    end
+
     local nearbyVehicles = GetVehiclesInRadius(GetEntityCoords(vehicle), 2.0)
 
     for _, entity in pairs(nearbyVehicles) do
