@@ -4,7 +4,7 @@ Config.debug = false
 
 -- Enabling this will let players lift the car up by using a `/...` command
 Config.command = {
-    enable = false,
+    enabled = false,
     name = 'lift'
 }
 
@@ -18,6 +18,33 @@ Config.qbSettings = {
     enabled = false,
     useNewQBExport = true,
     account = 'bank'
+}
+
+--Prints target vehicle's license plate number to client's console
+Config.printLicensePlateToConsole = true
+
+-- System on who can raise and lower vehicles ANY vehicle
+-- Players can only raise/lower TARGET VEHICLES by default
+Config.jackSystem = {
+   ['raise'] = {
+       everyone = false, --everyone can raise any car
+
+       -- Only these jobs can raise any car
+       jobs = {
+           'police',
+           'ems', -- Add your jobs here/Continue the list
+       }
+   },
+   --If your server has 'Advanced Wheel Spacers' Script, this feature will automatically be turned off (Needs additional compatibility)
+   ['lower'] = {
+       everyone = false, --everyone can lower any car
+
+       -- Only these jobs can lower any car
+       jobs = {
+           'police',
+           'ems', -- Add your jobs here/Continue the list
+       }
+   },
 }
 
 Config.job = {
@@ -40,12 +67,12 @@ Config.target = {
 --- DISPATCH
 -------------------------------------------------
 Config.dispatch = {
-    enable = true, -- Whether to enable the dispatch
+    enabled = false, -- Whether to enable the dispatch
     notifyThief = true, --If thief should be notified that police has been alerted
 
-    alertChance = 100, --- The chance of theft being notified to police members NOTE: The event gets called 4 times (once per each wheel) so set the chance to a relatively low number
+    alertChance = 10, --- The chance of theft being notified to police members NOTE: The event gets called 4 times (once per each wheel) so set the chance to a relatively low number
 
-    -- using 'in-built' dispatch will look like this: https://imgur.com/a/V1V7Z6z
+    -- using 'in-built' dispatch will look like this: [LINK TO HOW IT LOOKS]
     system = 'in-built',  -- Setting for the dispatch system to use 'cd-dispatch', 'core-dispatch-old', 'core-dispatch-new' or 'ps-dispatch'
     policeCode = '10-31',  -- Police code for the wheel theft
     eventName = 'Theft',  -- Name of the theft event
@@ -68,9 +95,9 @@ Config.policeJobNames = {
 }
 
 -- Whether to spawn a pick up truck for wheel theft (Check `client/truckSpawn.lua` if you want to edit this system)
---- NOTE: SCRIPT DOES NOT CHECK IF SPAWN SITE IS OCCUPIED OR NOT - PICK UP TRUCKS CAN SPAWN IN EACH OTHER
+-- Script checks if the current spawn is occupied, it will move to the next spawn coordinates - if all spots are taken - displays message to player
 Config.spawnPickupTruck = {
-    enable = false,
+    enable = true,
 
     -- Add more models by separating each with a comma ","
     models = {
@@ -78,10 +105,24 @@ Config.spawnPickupTruck = {
     },
 
     truckSpawnCoords = {
-        x = 407.6,
-        y = -1917.2,
-        z = 25.1,
-        h = 50.6 -- heading
+        {
+            x = 407.6,
+            y = -1917.2,
+            z = 25.1,
+            h = 50.6 -- heading
+        },
+        {
+            x = 405.58,
+            y = -1919.7,
+            z = 24.9,
+            h = 51.0
+        },
+        {
+            x = 403.3,
+            y = -1922.0,
+            z = 24.7,
+            h = 46.7
+        }
     }
 }
 
@@ -219,7 +260,8 @@ Locale = {
     ['Finish the job'] = 'Finish the job',
     ['Put the ~r~ stolen wheels ~w~ in the crate to finish the sale'] = 'Put the ~r~ stolen wheels ~w~ in the crate to finish the sale',
     ['. ~w~ Proceed with caution!'] = '. ~w~ Proceed with caution!',
-    ['Theft commited at ~y~'] = 'Theft commited at ~y~'
+    ['Theft commited at ~y~'] = 'Theft commited at ~y~',
+    ['~r~ No seats available at the moment'] = '~r~ No seats available at the moment'
 }
 
 Settings = {}

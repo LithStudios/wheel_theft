@@ -8,12 +8,44 @@ IsCar = function(veh)
     return (vc >= 0 and vc <= 7) or (vc >= 9 and vc <= 12) or (vc >= 17 and vc <= 20)
 end
 
+function CanRaiseVehicle(vehicle)
+    local permTable = Config.jackSystem['raise']
+
+    if TARGET_VEHICLE then
+        if  vehicle == TARGET_VEHICLE then
+            return true
+        end
+    end
+
+    if permTable.everyone or Contains(permTable.jobs, PLAYER_JOB) then
+        return true
+    end
+
+    return false
+end
+
+function CanLowerVehicle(vehicle)
+    local permTable = Config.jackSystem['lower']
+
+    if TARGET_VEHICLE then
+        if  vehicle == TARGET_VEHICLE then
+            return true
+        end
+    end
+
+    if permTable.everyone or Contains(permTable.jobs, PLAYER_JOB) then
+        return true
+    end
+
+    return false
+end
+
 function RaiseCar()
     local playerPed = PlayerPedId()
     local pCoords = GetEntityCoords(playerPed)
     local vehicle, netId = GetNearestVehicle(pCoords.x, pCoords.y, pCoords.z, 2.0)
 
-    if not JobCheck() then
+    if not JobCheck() or not CanRaiseVehicle(vehicle) then
         ShowTooltip(L('~r~ You can not do this'))
         return
     end
@@ -101,6 +133,7 @@ function RaiseCar()
         end)
     end
 end
+
 function FinishJackstand(object)
     local rot = GetEntityRotation(object, 5)
     DetachEntity(object)
@@ -121,7 +154,7 @@ function AttachJackToCar(object, vehicle)
     AttachEntityToEntity(object, vehicle, 0, offset, 0.0, 0.0, 90.0, 0, 0, 0, 0, 0, 1)
 end
 
-function LowerVehicle(errorCoords)
+function LowerVehicle(errorCoords, bypass)
     working = false
 
     local playerCoords = GetEntityCoords(PlayerPedId(-1))
@@ -129,7 +162,7 @@ function LowerVehicle(errorCoords)
 
     if veh and (Entity(veh).state.IsVehicleRaised or Entity(veh).state.spacerOnKqCarLift) then
 
-        if DoesVehicleHaveAllWheels(veh) then
+        if DoesVehicleHaveAllWheels(veh) and not bypass then
             ShowTooltip(L('Finish the job'))
             return
         end
@@ -170,7 +203,8 @@ function LowerVehicle(errorCoords)
             FreezeEntityPosition(veh, false)
         end
 
+        TriggerServerEvent('ls_wheel_theft:RetrieveItem', Config.jackStandName)
+
         return true
-        --TriggerServerEvent('ls_wheel_theft:RetrieveItem', jackName)
     end
 end

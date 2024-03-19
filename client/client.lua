@@ -16,11 +16,12 @@ MISSION_ACTIVATED = false
 PLAYER_JOB = nil
 STORED_WHEELS = {}
 WHEEL_PROP = nil
+TARGET_VEHICLE = nil
 
 function StartMission()
     MISSION_ACTIVATED = true
 
-    if Config.spawnPickupTruck.enable then
+    if Config.spawnPickupTruck.enabled then
         SpawnTruck()
     end
 
@@ -36,12 +37,17 @@ function StartMission()
         SetBlipAlpha(MISSION_AREA, 150)
         local vehicle = SpawnMissionVehicle(vehicleModel, missionLocation)
         SetCustomRims(vehicle)
+        TARGET_VEHICLE = vehicle
 
         if Config.enableBlipRoute then
             SetBlipRoute(MISSION_BLIP, true)
         end
 
         ShowTooltip(L('Your target vehicle\'s plate number: ~y~') .. GetVehicleNumberPlateText(vehicle))
+
+        if Config.printLicensePlateToConsole then
+            print('Your target vehicle\'s plate number:' .. GetVehicleNumberPlateText(vehicle))
+        end
 
         if Config.debug then
             SetEntityCoords(PlayerPedId(), missionLocation.x + 2.0, missionLocation.y, missionLocation.z, false, false, false, false)
@@ -55,7 +61,7 @@ function StartMission()
 
                 if distance < 3.5 then
                     sleep = 1
-                    Draw3DText(vehicleCoords.x, vehicleCoords.y, vehicleCoords.z + 0.5, L('Lift the car to steal wheels'), 4, 0.035, 0.035)
+                    Config.spawnPickupTruck.enabled3DText(vehicleCoords.x, vehicleCoords.y, vehicleCoords.z + 0.5, L('Lift the car to steal wheels'), 4, 0.035, 0.035)
 
                     if Entity(vehicle).state.IsVehicleRaised then
                         RemoveBlip(MISSION_BLIP)
@@ -97,7 +103,7 @@ function StartWheelTheft(vehicle)
             if isWheelMounted then
                 if not Config.target.enabled then
                     sleep = 1
-                    Draw3DText(wheelCoords.x, wheelCoords.y, wheelCoords.z, 'Press ~g~[~w~E~g~]~w~ to start stealing', 4, 0.035, 0.035)
+                    Config.spawnPickupTruck.enabled3DText(wheelCoords.x, wheelCoords.y, wheelCoords.z, 'Press ~g~[~w~E~g~]~w~ to start stealing', 4, 0.035, 0.035)
 
                     if IsControlJustReleased(0, Keys['E']) then
                         if IsPoliceNotified() then
@@ -129,6 +135,57 @@ function StartWheelTheft(vehicle)
 
         Citizen.Wait(sleep)
     end
+end
+
+print(GetResourceState('ls_wheelspacers') == 'started')
+if GetResourceState('ls_wheelspacers') ~= 'started' then
+    print('lets goo')
+    Citizen.CreateThread(function()
+        local permTable = Config.jackSystem['lower']
+
+        while true do
+            local sleep = 1500
+            local player = PlayerPedId()
+            local coords = GetEntityCoords(player)
+
+            if permTable.everyone or CanPlayerLowerThisCar() then
+                local vehicle, isRaised = NearestVehicleCached(coords, 3.0)
+
+                if vehicle and isRaised then
+                    sleep = 1
+                    local vehicleCoords = GetEntityCoords(vehicle)
+                    Draw3DText(vehicleCoords.x, vehicleCoords.y, vehicleCoords.z + 0.5, L('Press ~g~[~w~E~g~]~w~ to lower this vehicle'), 4, 0.065, 0.065)
+
+                    if IsControlJustReleased(0, Keys['E']) then
+                        LowerVehicle(false, true)
+                    end
+                end
+            end
+
+            Citizen.Wait(sleep)
+        end
+    end)
+end
+
+function CanPlayerLowerThisCar()
+    local permTable = Config.jackSystem['lower']
+
+    return UseCache('jobCache', function()
+        return Contains(permTable.jobs, PLAYER_JOB)
+    end, 500)
+end
+
+function NearestVehicleCached(coords, radius)
+    return UseCache('nearestCacheVehicle', function()
+        local vehicle = GetNearestVehicle(coords.x, coords.y, coords.z, radius)
+
+        if vehicle then
+            return vehicle, Entity(vehicle).state.IsVehicleRaised
+        else
+            return vehicle
+        end
+
+    end, 500)
 end
 
 function StopWheelTheft(vehicle)
@@ -167,7 +224,7 @@ function StopWheelTheft(vehicle)
 end
 
 function IsPoliceNotified()
-    if not Config.dispatch.enable then
+    if not Config.dispatch.enabled then
         return false
     end
 
@@ -282,7 +339,7 @@ AddEventHandler('ls_wheel_theft:LowerVehicle', function()
     LowerVehicle()
 end)
 
-if Config.command.enable then
+if Config.command.enabled then
     RegisterCommand(Config.command.name, function()
         RaiseCar()
         TriggerServerEvent('ls_wheel_theft:ResetPlayerState', NetworkGetNetworkIdFromEntity(PlayerPedId()))

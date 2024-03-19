@@ -22,7 +22,7 @@ AddEventHandler('ls_wheel_theft:PoliceAlert', function(locationCoords)
     local _source = source
     locationCoords = json.decode(locationCoords)
 
-    if Config.dispatch.enable then
+    if Config.dispatch.enabled then
         if Config.dispatch.system == 'in-built' then
             for _, playerId in ipairs(GetPlayers()) do
                 playerId = tonumber(playerId)
