@@ -17,7 +17,12 @@ Config.esxSettings = {
 Config.qbSettings = {
     enabled = false,
     useNewQBExport = true,
-    account = 'bank'
+    account = 'bank',
+    payInItems = {
+        enabled = false, -- If enabled, player will receive payment in items instead in their account
+        itemName = 'cash',
+        count = math.random(100, 500)
+    }
 }
 
 --Prints target vehicle's license plate number to client's console
@@ -97,7 +102,7 @@ Config.policeJobNames = {
 -- Whether to spawn a pick up truck for wheel theft (Check `client/truckSpawn.lua` if you want to edit this system)
 -- Script checks if the current spawn is occupied, it will move to the next spawn coordinates - if all spots are taken - displays message to player
 Config.spawnPickupTruck = {
-    enable = true,
+    enabled = true,
 
     -- Add more models by separating each with a comma ","
     models = {

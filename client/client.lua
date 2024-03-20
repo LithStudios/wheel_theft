@@ -61,7 +61,7 @@ function StartMission()
 
                 if distance < 3.5 then
                     sleep = 1
-                    Config.spawnPickupTruck.enabled3DText(vehicleCoords.x, vehicleCoords.y, vehicleCoords.z + 0.5, L('Lift the car to steal wheels'), 4, 0.035, 0.035)
+                    Draw3DText(vehicleCoords.x, vehicleCoords.y, vehicleCoords.z + 0.5, L('Lift the car to steal wheels'), 4, 0.035, 0.035)
 
                     if Entity(vehicle).state.IsVehicleRaised then
                         RemoveBlip(MISSION_BLIP)
@@ -103,7 +103,7 @@ function StartWheelTheft(vehicle)
             if isWheelMounted then
                 if not Config.target.enabled then
                     sleep = 1
-                    Config.spawnPickupTruck.enabled3DText(wheelCoords.x, wheelCoords.y, wheelCoords.z, 'Press ~g~[~w~E~g~]~w~ to start stealing', 4, 0.035, 0.035)
+                    Draw3DText(wheelCoords.x, wheelCoords.y, wheelCoords.z, 'Press ~g~[~w~E~g~]~w~ to start stealing', 4, 0.035, 0.035)
 
                     if IsControlJustReleased(0, Keys['E']) then
                         if IsPoliceNotified() then
@@ -137,9 +137,7 @@ function StartWheelTheft(vehicle)
     end
 end
 
-print(GetResourceState('ls_wheelspacers') == 'started')
 if GetResourceState('ls_wheelspacers') ~= 'started' then
-    print('lets goo')
     Citizen.CreateThread(function()
         local permTable = Config.jackSystem['lower']
 

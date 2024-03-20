@@ -36,9 +36,14 @@ if Config.qbSettings.enabled then
         return Contains(Config.policeJobNames, job.name)
     end
 
-    function RetrieveItem(source, itemId)
+    function RetrieveItem(source, itemId, count)
         local xPlayer = QBCore.Functions.GetPlayer(tonumber(source))
-        xPlayer.Functions.AddItem(itemId, 1)
+
+        if count then
+            xPlayer.Functions.AddItem(itemId, count)
+        else
+            xPlayer.Functions.AddItem(itemId, 1)
+        end
     end
 
     function AddMoney(player, amount)
@@ -47,7 +52,11 @@ if Config.qbSettings.enabled then
             return false
         end
 
-        xPlayer.Functions.AddMoney(Config.qbSettings.account, amount)
+        if Config.qbSettings.payInItems.enabled then
+            RetrieveItem(player, Config.qbSettings.payInItems.itemName, Config.qbSettings.payInItems.count)
+        else
+            xPlayer.Functions.AddMoney(Config.qbSettings.account, amount)
+        end
     end
 
     function RemovePlayerItem(player, item, amount)
