@@ -15,7 +15,7 @@ function SpawnTruck()
         return
     end
 
-    local vehicle = SpawnMissionVehicle(vehicleModel, truckTable.truckSpawnCoords[availableSpotIndex], true)
+    local vehicle = SpawnMissionVehicle(vehicleModel, truckTable.truckSpawnCoords[availableSpotIndex], true, true)
 end
 
 function IsPlaceTaken(index)

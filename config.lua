@@ -131,7 +131,7 @@ Config.spawnPickupTruck = {
     }
 }
 
-Config.jackStandName = 'ls_jackstand'
+Config.jackStandName = 'ls_jackstand_alt'
 
 -- If route should be drawn on the minimap/map for the player
 Config.enableBlipRoute = true

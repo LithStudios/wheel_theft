@@ -15,14 +15,8 @@ if Config.esxSettings.enabled then
     end
 
     ESX.RegisterUsableItem(Config.jackStandName, function(source)
-        if GetResourceState('ls_wheelspacers') == 'started' then
-            TriggerClientEvent('ls_wheel_theft:LiftVehicle', source)
-            UseItem(source)
-            Player(source).state.WheelTheftMission = true
-        else
-            TriggerClientEvent('ls_wheel_theft:LiftVehicle', source)
-            UseItem(source)
-        end
+        TriggerClientEvent('ls_wheel_theft:LiftVehicle', source)
+        UseItem(source)
     end)
 
     function IsPolice(player)

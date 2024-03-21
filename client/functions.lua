@@ -91,7 +91,7 @@ function GetNearestVehicle(x, y, z, radius)
     return closestVehicle, NetworkGetNetworkIdFromEntity(closestVehicle)
 end
 
-function SpawnMissionVehicle(modelName, coords, preventNearbyCarDeletion)
+function SpawnMissionVehicle(modelName, coords, preventNearbyCarDeletion, preventCarLock)
     RequestModel(modelName)
     while not HasModelLoaded(modelName) do
         Citizen.Wait(100)
@@ -111,6 +111,10 @@ function SpawnMissionVehicle(modelName, coords, preventNearbyCarDeletion)
             SetEntityAsMissionEntity(entity, true, true)
             DeleteEntity(entity)
         end
+    end
+
+    if preventCarLock then
+        return vehicle
     end
 
     SetVehicleDoorsLocked(vehicle, 2)

@@ -1,3 +1,6 @@
+TARGET_VEHICLE = nil
+CLOSEST_VEHICLE = nil
+
 RegisterServerEvent('ls_wheel_theft:Sell')
 AddEventHandler('ls_wheel_theft:Sell', function(sellingKey)
     local _source = source
@@ -44,9 +47,9 @@ end)
 
 RegisterServerEvent('ls_wheel_theft:ResetPlayerState')
 AddEventHandler('ls_wheel_theft:ResetPlayerState', function(netId)
-    local player = NetworkGetEntityFromNetworkId(netId)
+    local _source = source
     Wait(5000)
-    Player(player).state.WheelTheftMission = false
+    Player(_source).state.WheelTheftMission = false
 end)
 
 RegisterServerEvent('ls_wheel_theft:server:forceDeleteJackStand')

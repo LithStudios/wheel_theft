@@ -88,7 +88,7 @@ end
 
 function StartWheelTheft(vehicle)
     Citizen.Wait(4000)
-    local notified = false
+    local notified = 'waiting'
 
     while true do
         local sleep = 1000
@@ -106,7 +106,7 @@ function StartWheelTheft(vehicle)
                     Draw3DText(wheelCoords.x, wheelCoords.y, wheelCoords.z, 'Press ~g~[~w~E~g~]~w~ to start stealing', 4, 0.035, 0.035)
 
                     if IsControlJustReleased(0, Keys['E']) then
-                        if IsPoliceNotified() then
+                        if notified == 'waiting' and IsPoliceNotified() then
                             notified = true
 
                             if Config.dispatch.notifyThief then
@@ -114,7 +114,10 @@ function StartWheelTheft(vehicle)
                             end
 
                             TriggerDispatch(GetEntityCoords(PlayerPedId()))
+                        elseif notified == 'waiting' and not IsPoliceNotified() then
+                            notified = false
                         end
+
                         StartWheelDismount(vehicle, wheelIndex, false, true, false)
                     end
                 else
@@ -137,34 +140,6 @@ function StartWheelTheft(vehicle)
     end
 end
 
-if GetResourceState('ls_wheelspacers') ~= 'started' then
-    Citizen.CreateThread(function()
-        local permTable = Config.jackSystem['lower']
-
-        while true do
-            local sleep = 1500
-            local player = PlayerPedId()
-            local coords = GetEntityCoords(player)
-
-            if permTable.everyone or CanPlayerLowerThisCar() then
-                local vehicle, isRaised = NearestVehicleCached(coords, 3.0)
-
-                if vehicle and isRaised then
-                    sleep = 1
-                    local vehicleCoords = GetEntityCoords(vehicle)
-                    Draw3DText(vehicleCoords.x, vehicleCoords.y, vehicleCoords.z + 0.5, L('Press ~g~[~w~E~g~]~w~ to lower this vehicle'), 4, 0.065, 0.065)
-
-                    if IsControlJustReleased(0, Keys['E']) then
-                        LowerVehicle(false, true)
-                    end
-                end
-            end
-
-            Citizen.Wait(sleep)
-        end
-    end)
-end
-
 function CanPlayerLowerThisCar()
     local permTable = Config.jackSystem['lower']
 
@@ -172,6 +147,32 @@ function CanPlayerLowerThisCar()
         return Contains(permTable.jobs, PLAYER_JOB)
     end, 500)
 end
+
+Citizen.CreateThread(function()
+    local permTable = Config.jackSystem['lower']
+
+    while true do
+        local sleep = 1500
+        local player = PlayerPedId()
+        local coords = GetEntityCoords(player)
+
+        if permTable.everyone or CanPlayerLowerThisCar() then
+            local vehicle, isRaised = NearestVehicleCached(coords, 3.0)
+
+            if vehicle and isRaised then
+                sleep = 1
+                local vehicleCoords = GetEntityCoords(vehicle)
+                Draw3DText(vehicleCoords.x, vehicleCoords.y, vehicleCoords.z + 0.5, L('Press ~g~[~w~E~g~]~w~ to lower this vehicle'), 4, 0.065, 0.065)
+
+                if IsControlJustReleased(0, Keys['E']) then
+                    LowerVehicle(false, true)
+                end
+            end
+        end
+
+        Citizen.Wait(sleep)
+    end
+end)
 
 function NearestVehicleCached(coords, radius)
     return UseCache('nearestCacheVehicle', function()
