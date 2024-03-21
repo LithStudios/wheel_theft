@@ -40,7 +40,6 @@ Config.jackSystem = {
            'ems', -- Add your jobs here/Continue the list
        }
    },
-   --If your server has 'Advanced Wheel Spacers' Script, this feature will automatically be turned off (Needs additional compatibility)
    ['lower'] = {
        everyone = false, --everyone can lower any car
 
