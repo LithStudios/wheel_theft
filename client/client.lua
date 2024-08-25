@@ -103,7 +103,7 @@ function StartWheelTheft(vehicle)
             if isWheelMounted then
                 if not Config.target.enabled then
                     sleep = 1
-                    Draw3DText(wheelCoords.x, wheelCoords.y, wheelCoords.z, 'Press ~g~[~w~E~g~]~w~ to start stealing', 4, 0.035, 0.035)
+                    Draw3DText(wheelCoords.x, wheelCoords.y, wheelCoords.z, L('Press ~g~[~w~E~g~]~w~ to start stealing'), 4, 0.035, 0.035)
 
                     if IsControlJustReleased(0, Keys['E']) then
                         if notified == 'waiting' and IsPoliceNotified() then
@@ -159,13 +159,30 @@ Citizen.CreateThread(function()
         if permTable.everyone or CanPlayerLowerThisCar() then
             local vehicle, isRaised = NearestVehicleCached(coords, 3.0)
 
-            if vehicle and isRaised then
+            if vehicle and vehicle ~= TARGET_VEHICLE and isRaised then
                 sleep = 1
+                local wheelCoords, wheelToPlayerDistance, wheelIndex, isWheelMounted = FindNearestWheel(vehicle)
                 local vehicleCoords = GetEntityCoords(vehicle)
-                Draw3DText(vehicleCoords.x, vehicleCoords.y, vehicleCoords.z + 0.5, L('Press ~g~[~w~E~g~]~w~ to lower this vehicle'), 4, 0.065, 0.065)
 
-                if IsControlJustReleased(0, Keys['E']) then
-                    LowerVehicle(false, true)
+                if isWheelMounted then
+                    Draw3DText(wheelCoords.x, wheelCoords.y, wheelCoords.z + 0.5, L('Press ~g~[~w~E~g~]~w~ to steal this wheel'), 4, 0.065, 0.065)
+
+                    if IsControlJustReleased(0, Keys['E']) then
+                        StartWheelDismount(vehicle, wheelIndex, false, true, false, true)
+                    end
+                else
+                    Draw3DText(vehicleCoords.x, vehicleCoords.y, vehicleCoords.z + 0.5, L('Press ~g~[~w~E~g~]~w~ to lower this vehicle'), 4, 0.065, 0.065)
+
+                    if IsControlJustReleased(0, Keys['E']) then
+                        local lowered = LowerVehicle(false, true)
+
+                        while not lowered do
+                            Citizen.Wait(100)
+                        end
+
+                        SpawnBricksUnderVehicle(vehicle)
+                        break
+                    end
                 end
             end
         end
@@ -303,13 +320,17 @@ function EnableWheelTakeOut()
     end
 end
 
-function StartWheelDismount(vehicle, wheelIndex, mount, TaskPlayerGoToWheel, coordsTable)
+function StartWheelDismount(vehicle, wheelIndex, mount, TaskPlayerGoToWheel, coordsTable, disableWheelProp)
     local success = exports['ls_bolt_minigame']:BoltMinigame(vehicle, wheelIndex, mount, TaskPlayerGoToWheel, coordsTable)
 
-    if success then
+    if success and not disableWheelProp then
         SetVehicleWheelXOffset(vehicle, wheelIndex, 9999999.0)
         WHEEL_PROP = PutWheelInHands()
         BeginWheelLoadingIntoTruck(WHEEL_PROP)
+    end
+
+    if disableWheelProp then
+        BreakOffVehicleWheel(vehicle, wheelIndex, false, false, false, false)
     end
 end
 

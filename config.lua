@@ -4,7 +4,7 @@ Config.debug = false
 
 -- Enabling this will let players lift the car up by using a `/...` command
 Config.command = {
-    enabled = false,
+    enabled = true,
     name = 'lift'
 }
 
@@ -265,7 +265,9 @@ Locale = {
     ['Put the ~r~ stolen wheels ~w~ in the crate to finish the sale'] = 'Put the ~r~ stolen wheels ~w~ in the crate to finish the sale',
     ['. ~w~ Proceed with caution!'] = '. ~w~ Proceed with caution!',
     ['Theft commited at ~y~'] = 'Theft commited at ~y~',
-    ['~r~ No seats available at the moment'] = '~r~ No seats available at the moment'
+    ['~r~ No seats available at the moment'] = '~r~ No seats available at the moment',
+    ['Press ~g~[~w~E~g~]~w~ to start stealing'] = 'Press ~g~[~w~E~g~]~w~ to start stealing',
+    ['Press ~g~[~w~E~g~]~w~ to steal this wheel'] = 'Press ~g~[~w~E~g~]~w~ to steal this wheel'
 }
 
 Settings = {}

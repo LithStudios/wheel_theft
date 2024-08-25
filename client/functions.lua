@@ -292,7 +292,7 @@ function FindNearestWheel(vehicle)
     local chassisCoords = GetWorldPositionOfEntityBone(vehicle, chassisBone)
     local chassisWheelDistance = GetDistanceBetweenCoords(chassisCoords, boneCoords)
 
-    if chassisWheelDistance > 10.0 then
+    if chassisWheelDistance > 10.0 or chassisWheelDistance == 0.0 then
         isWheelMounted = false
     end
 

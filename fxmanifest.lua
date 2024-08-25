@@ -3,7 +3,7 @@ games      { 'gta5' }
 
 author 'Lith Studios | Swizz'
 description 'Wheel Theft by Lith Studios'
-version '1.2.2'
+version '1.2.3'
 
 --
 -- Server

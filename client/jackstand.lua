@@ -65,8 +65,6 @@ function RaiseCar()
                 print('Can\'t get control of the entity')
                 return
             end
-            
-            TriggerServerEvent('ls_wheel_theft:server:setIsRaised', netId, true)
 
             local vehpos = GetEntityCoords(veh)
             local playerCoords = GetEntityCoords(playerPed)
@@ -129,6 +127,7 @@ function RaiseCar()
             Citizen.Wait(1500)
             ClearPedTasks(playerPed)
 
+            TriggerServerEvent('ls_wheel_theft:server:setIsRaised', netId, true)
             --OnVehicleRaised(veh)
         end)
     end
@@ -199,11 +198,9 @@ function LowerVehicle(errorCoords, bypass)
 
             TriggerServerEvent('ls_wheel_theft:server:setIsRaised', netId, false)
         else
-            TriggerServerEvent('ls_wheel_theft:server:setIsRaised', netId, false, true)
+            TriggerServerEvent('ls_wheel_theft:server:setIsRaised', netId, false)
             FreezeEntityPosition(veh, false)
         end
-
-        TriggerServerEvent('ls_wheel_theft:RetrieveItem', Config.jackStandName)
 
         return true
     end
